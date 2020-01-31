@@ -11,8 +11,6 @@ headers = {
   'Connection': 'keep-alive'
 }
 
-text = "from lc_put command"
-
 #parse column A for sample IDs
 samplelist = ""
 wb = load_workbook(filename = 'Book1.xlsx')

@@ -1,17 +1,9 @@
 from flask import Flask, render_template, request
 import requests
 import re
+import H
 
 app = Flask(__name__)
-#API header for labcollector
-header  = {
-'Accept': 'application/json;odata.metadata=full',
-'X-LC-APP-Auth': 'b970d14af941f18aa1417c874e0f414db437fa6b277bf4c7ec196a189fc9f0c5',
-'Host': '10.95.2.101',
-'Accept-Encoding': 'gzip, deflate, br',
-'Connection': 'keep-alive'
-}
-url = "http://10.95.2.101/lab/webservice/v1/samples?label="
 
 @app.route('/')
 def home():
@@ -20,8 +12,9 @@ def home():
 @app.route("/result", methods=["POST"])
 def result():
     name = request.form.get("name")
-    url + name
-    response_text = requests.request("GET", url, headers=header).text
+    H.url + name
+    print(H.url+name)
+    response_text = requests.request("GET", H.url, headers=H.headers).text
     return render_template("result.html", name=response_text)
 
 @app.route("/update")
