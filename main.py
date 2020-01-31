@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request
-from LC_PUT import *
 
 app = Flask(__name__)
 
