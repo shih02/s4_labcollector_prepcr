@@ -13,22 +13,21 @@ headers = {
 
 text = "from lc_put command"
 
-def lcput():
 #parse column A for sample IDs
-  samplelist = ""
-  wb = load_workbook(filename = 'Book1.xlsx')
-  ws = wb['Sheet1']
-  for x in range(1, ws.max_row+1):
-    id = ws.cell(row = x, column = 1).value
-    concentration = ws.cell(row = x, column = 2).value
-    url = "http://10.95.2.101/lab/webservice/v1/samples?label=" + id
-    response = requests.request("GET", url, headers=headers)
-    res_split = re.split(r'[,:""]',response.text)
-    count = res_split[4]
-    payload = {'comments': 'API testing' + str(x),'origin': concentration,'volume': concentration}
-    print(id+count+str(concentration))
-    put_url = "http://10.95.2.101/lab/webservice/v1/samples/" + count
-    put_response = requests.request("PUT", put_url, headers=headers, data = payload)
+samplelist = ""
+wb = load_workbook(filename = 'Book1.xlsx')
+ws = wb['Sheet1']
+for x in range(1, ws.max_row+1):
+  id = ws.cell(row = x, column = 1).value
+  concentration = ws.cell(row = x, column = 2).value
+  url = "http://10.95.2.101/lab/webservice/v1/samples?label=" + id
+  response = requests.request("GET", url, headers=headers)
+  res_split = re.split(r'[,:""]',response.text)
+  count = res_split[4]
+  payload = {'comments': 'API testing' + str(x),'origin': concentration,'volume': concentration}
+  print(id+count+str(concentration))
+  put_url = "http://10.95.2.101/lab/webservice/v1/samples/" + count
+  put_response = requests.request("PUT", put_url, headers=headers, data = payload)
 
 
 # get below
