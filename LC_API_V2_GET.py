@@ -41,4 +41,6 @@ for i in range(x):
   sample_dict = (count+","+sample[i]+","+volume)
   dict_list.append(sample_dict)
 
+print(response_text)
+print(res_split)
 print(dict_list)

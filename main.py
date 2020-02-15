@@ -34,12 +34,12 @@ def result():
     for i in range(x):
         result = response_text.find(sample[i])
         res_split = re.split(r'[,:]',response_text[result-53:result+195])
-        count = res_split[1]
+        #count = res_split[1]
         volume = res_split[21]
-        sample_dict = ("Lab ID: "+sample[i]+" - Concentration: "+volume+"ng/uL")
+        sample_dict = dict(ID=sample[i], conc=eval(volume))
         dict_list.append(sample_dict)
-    dict_list = '\n'.join(dict_list)
-    return render_template("result.html", name=dict_list)
+
+    return render_template("result.html", dict_list=dict_list)
 
 @app.route("/update")
 def update():
