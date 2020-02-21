@@ -11,3 +11,4 @@ url = "http://10.95.2.101/lab/webservice/v1/samples?label="
 
 url_v2 = "http://10.95.2.101/lab/webservice/index.php?v=2&action=tube_sorter&record_name="
 
+put_url = "http://10.95.2.101/lab/webservice/v1/samples/"

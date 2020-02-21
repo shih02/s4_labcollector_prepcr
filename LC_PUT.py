@@ -3,15 +3,6 @@ import re
 import H
 from openpyxl import load_workbook, workbook
 
-#API header for labcollector
-# headers = {
-#   'Accept': 'application/json;odata.metadata=full',
-#   'X-LC-APP-Auth': 'b970d14af941f18aa1417c874e0f414db437fa6b277bf4c7ec196a189fc9f0c5',
-#   'Host': '10.95.2.101',
-#   'Accept-Encoding': 'gzip, deflate, br',
-#   'Connection': 'keep-alive'
-# }
-
 #parse column A for sample IDs
 samplelist = ""
 wb = load_workbook(filename = 'Book1.xlsx')
@@ -20,10 +11,11 @@ for x in range(1, ws.max_row+1):
   id = ws.cell(row = x, column = 1).value
   concentration = ws.cell(row = x, column = 2).value
   url = H.url + id
-  response = requests.request("GET", H.url, headers=H.headers)
+  response = requests.request("GET", url, headers=H.headers)
   res_split = re.split(r'[,:""]',response.text)
+  print(res_split)
   count = res_split[4]
-  payload = {'comments': 'API testing' + str(x),'origin': concentration,'volume': concentration}
+  payload = {'comments': 'VS testing' + str(x),'origin': concentration,'volume': concentration}
   print(id+count+str(concentration))
   put_url = "http://10.95.2.101/lab/webservice/v1/samples/" + count
   put_response = requests.request("PUT", put_url, headers=H.headers, data = payload)

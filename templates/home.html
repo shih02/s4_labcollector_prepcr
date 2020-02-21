@@ -6,13 +6,17 @@
 
 {% block body %}
 <div class="content">
-    <h1 style="text-align: center">Get Sample Concentration</h1>
+    <h1 style="text-align: center">LabCollector Sample Concentration</h1>
 
     <div class="form">
         <form action="/result" method="POST">
-            <input type="file" name="name">
-            <input type="submit" value="Submit">
+            <p><input type="file" name="name" /></p></n>
+            <p><input type="submit" value="Search" />
+        </form>
+        <form action="/update" method="GET">
+            <input type="submit" value="Update" /></p>
         </form>
     </div>
+
 </div>
 {% endblock %}
