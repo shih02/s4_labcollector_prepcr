@@ -13,11 +13,10 @@ def home():
 
 @app.route("/result", methods=["POST"])
 def result():
-    
     samplelist = ""
     dict_list = []
     name = request.form.get("name") #this is for searching
-    wb = load_workbook(filename = 'Book1.xlsx')
+    wb = load_workbook(filename = name)
     ws = wb['Sheet1']
 
     for x in range(1, ws.max_row+1):
@@ -39,10 +38,11 @@ def result():
           
     return render_template("result.html", dict_list=dict_list)
     
-@app.route("/update")
+@app.route("/update", methods=["POST"])
 def update():
-
-    wb = load_workbook(filename = 'Book1.xlsx')
+    
+    name = request.form.get("name") #this is for searching
+    wb = load_workbook(filename = name)
     ws = wb['Sheet1']
     samplelist = ""
     dict_list = []
@@ -64,7 +64,7 @@ def update():
         if id == my_response[x-1]['label']:
             payload = {'comments': 'VS dictionary testing' + str(x),'origin': concentration,'volume': concentration}
             put_response = requests.request("PUT", H.put_url+my_response[x-1]['count'], headers=H.headers, data = payload)
-            dict_list.append(dict(ID=id, conc=concentration, ct=my_response[x-1]['count']))
+            dict_list.append(dict(ID=id, conc=concentration,num=x))
 
     return render_template("update.html", dict_list=dict_list)
     

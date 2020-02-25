@@ -26,15 +26,17 @@
       
         <table>
           <tr>
+            <th>Sample Number</th>
             <th>Sample ID</th>
             <th>Concentration</th>
             <th>Count</th>
           </tr>
         {% for item in dict_list %}
           <TR>
-            <TD header="th" TD class="c1">{{item.ID}}</TD>
-            <TD header="th" td style="text-align: right" TD class="c2">{{item.conc}}</TD>
-            <TD header="th" TD class="c3">{{item.ct}}</TD>
+            <TD header="th" TD class="c1">{{item.num}}</TD>
+            <TD header="th" TD class="c2">{{item.ID}}</TD>
+            <TD header="th" td style="text-align: right" TD class="c3">{{item.conc}}</TD>
+            <TD header="th" TD class="c4">{{item.ct}}</TD>
           </TR>
         {% endfor %}
         </table>
