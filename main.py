@@ -64,9 +64,9 @@ def update():
         if id == my_response[x-1]['label']:
             payload = {'comments': 'VS dictionary testing' + str(x),'origin': concentration,'volume': concentration}
             put_response = requests.request("PUT", H.put_url+my_response[x-1]['count'], headers=H.headers, data = payload)
-            dict_list.append(dict(ID=id, conc=concentration,num=x))
+            dict_list.append(dict(ID=id, conc=concentration,num=x)) #count was excluded in dict_list
 
     return render_template("update.html", dict_list=dict_list)
     
 if __name__ == "__main__":
-    app.run(debug=True, port="3134")
+    app.run(debug=True, port="5000")
