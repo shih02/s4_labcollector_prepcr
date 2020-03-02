@@ -2,13 +2,13 @@
 
 {% block head %}
 <div class="header">
-  <a href="http://10.95.2.101/lab/" target="blank" class="logo">LabCollector</a>
-  <div class="header-right">
-    <a href="/">Home</a>
-    <a class="active">Search</a>
-    <a>Update</a>
+    <a href="http://10.95.2.101/lab/" target="blank" class="logo">LabCollector</a>
+    <div class="header-right">
+      <a href="/">Home</a>
+      <a href="/search">Search</a>
+      <a href="/update">Update</a>
+    </div>
   </div>
-</div>
 {% endblock %}
 
 {% block body %}
@@ -33,15 +33,17 @@
       
         <table>
           <tr>
-            <th>Number</th>
+            <th>Sample Number</th>
             <th>Sample ID</th>
             <th>Concentration</th>
+            <th>Count</th>
           </tr>
         {% for item in dict_list %}
           <TR>
             <TD header="th" TD class="c1">{{item.num}}</TD>
             <TD header="th" TD class="c2">{{item.ID}}</TD>
             <TD header="th" td style="text-align: right" TD class="c3">{{item.conc}}</TD>
+            <TD header="th" TD class="c4">{{item.ct}}</TD>
           </TR>
         {% endfor %}
         </table>

@@ -1,5 +1,4 @@
 Flask
 Werkzeug
 requests
-re
 openpyxl

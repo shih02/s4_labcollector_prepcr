@@ -11,6 +11,14 @@ app = Flask(__name__)
 def home():
     return render_template("home.html")
 
+@app.route('/search')
+def search():
+    return render_template("search.html")
+
+@app.route('/update')
+def upload():
+    return render_template("update.html")
+
 @app.route("/result", methods=["POST"])
 def result():
     samplelist = ""
@@ -38,14 +46,12 @@ def result():
           
     return render_template("result.html", dict_list=dict_list)
     
-@app.route("/update", methods=["POST"])
 def update():
-    
-    name = request.form.get("name") #this is for searching
-    wb = load_workbook(filename = name)
-    ws = wb['Sheet1']
     samplelist = ""
     dict_list = []
+    myfile = request.form.get("name") #this is for searching
+    wb = load_workbook(filename = myfile)
+    ws = wb['Sheet1']
 
     for x in range(1, ws.max_row+1):
         id = ws.cell(row = x, column = 1).value
@@ -62,11 +68,11 @@ def update():
         id = ws.cell(row = x, column = 1).value
         concentration = ws.cell(row = x, column = 2).value
         if id == my_response[x-1]['label']:
-            payload = {'comments': 'VS dictionary testing' + str(x),'origin': concentration,'volume': concentration}
+            payload = {'comments': 'payload_testing' + str(x),'origin': concentration,'volume': concentration}
             put_response = requests.request("PUT", H.put_url+my_response[x-1]['count'], headers=H.headers, data = payload)
-            dict_list.append(dict(ID=id, conc=concentration,num=x)) #count was excluded in dict_list
+            dict_list.append(dict(ID=id, conc=concentration,num=x, ct=my_response[x-1]['count'])) #count was excluded in dict_list
 
-    return render_template("update.html", dict_list=dict_list)
+    return render_template("result.html", dict_list=dict_list)
     
 if __name__ == "__main__":
     app.run(debug=True)
