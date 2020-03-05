@@ -6,7 +6,7 @@
     <div class="header-right">
       <a href="/">Home</a>
       <a href="/search">Search</a>
-      <a href="/update">Update</a>
+      <a class="active">Update</a>
     </div>
   </div>
 {% endblock %}
@@ -16,8 +16,7 @@
   <h1 style="text-align: center">Upload LabCollector Concentration</h1>
 
   <div class="form">
-      <form action="/result" method="POST">
-
+      <form action="/update" method="POST" enctype="multipart/form-data">
           <input type="file" name="name" /></n>
           <input type="submit" value="Upload" />
       </form>
