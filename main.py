@@ -5,6 +5,7 @@ import re
 import H
 import json
 import os
+import csv
 from openpyxl import load_workbook, workbook
 
 app = Flask(__name__)
@@ -51,22 +52,28 @@ def update():
         dict_list = []
         f = request.files['name']
         f.save(secure_filename(f.filename))        
-        wb = load_workbook(filename = f)
-        ws = wb.worksheets[0]
-
-        for x in range(7, ws.max_row+1):
-            id = ws.cell(row = x, column = 1).value
-            if not ws.cell(row=x, colum = 9).value:
-                ext = ws.cell(row=x, colum = 9).value
-                if ext == "FE":
-                    ext = "_10"
-                elif ext == "SE":
-                    ext = "_20"
-                elif ext == "TE":
-                    ext = "_30"
-                elif ext == "FO":
-                    ext = "_40"
-            samplelist = samplelist + id + ext +","
+        
+        with open(f.filename, 'r') as csvfile:
+            csvreader = csv.reader(csvfile)
+            rows = list(csvreader)  
+            for x in range(7,103):
+                try:
+                    id = rows[x][0]
+                    if rows[x][8] == "FE":
+                        ext = "_10"
+                    elif rows[x][8] == "SE":
+                        ext = "_20"
+                    elif rows[x][8] == "TE":
+                        ext = "_30"
+                    elif rows[x][8] == "FO":
+                        ext = "_40"
+                    else:
+                        ext = ""
+                except IndexError:
+                    break
+                
+                samplelist += id + ext + ","
+        
         #generate response and set response variables 
         # // careful with this loop as it can break LC server!!
         url = H.url_v2 + samplelist
@@ -75,14 +82,18 @@ def update():
         my_response = json.loads(response_text)
         # //
 
-        for x in range(1, ws.max_row+1):
-            id = ws.cell(row = x, column = 1).value
-            concentration = ws.cell(row = x, column = 5).value
-            if id == my_response[x-1]['label']:
-                payload = {'comments': 'payload_testing' + str(x),'origin': concentration,'volume': concentration}
-                put_response = requests.request("PUT", H.put_url+my_response[x-1]['count'], headers=H.headers, data = payload)
-                dict_list.append(dict(ID=id, conc=concentration,num=x, ct=my_response[x-1]['count'])) #count was excluded in dict_list
-
+        for y in range(7,103):
+            try:
+                id = rows[y][0]
+                concentration = rows[y][4]
+                if id == my_response[y-7]['label']:
+                    payload = {'comments': 'payload_testing' + str(y),'origin': concentration,'volume': concentration}
+                    put_response = requests.request("PUT", H.put_url+my_response[y-7]['count'], headers=H.headers, data = payload)
+                    dict_list.append(dict(ID=id, conc=concentration,num=y, ct=my_response[y-7]['count']))
+            
+            except IndexError:
+                break
+        
         return render_template("result.html", dict_list=dict_list)
     else:
         return render_template("update.html")
