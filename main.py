@@ -89,7 +89,7 @@ def update():
                 if id == my_response[y-7]['label']:
                     payload = {'comments': 'payload_testing' + str(y),'origin': concentration,'volume': concentration}
                     put_response = requests.request("PUT", H.put_url+my_response[y-7]['count'], headers=H.headers, data = payload)
-                    dict_list.append(dict(ID=id, conc=concentration,num=y, ct=my_response[y-7]['count']))
+                    dict_list.append(dict(ID=id, conc=concentration,num=y-6, ct=my_response[y-7]['count']))
             
             except IndexError:
                 break
