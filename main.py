@@ -6,7 +6,6 @@ import H
 import json
 import os
 import csv
-from openpyxl import load_workbook, workbook
 
 app = Flask(__name__)
 
@@ -19,15 +18,21 @@ def result():
     if request.method == 'POST':
         samplelist = ""
         dict_list = []
-        f = request.files['name']
-        f.save(secure_filename(f.filename))        
-        wb = load_workbook(filename = f)
-        ws = wb.worksheets[0]
-
-        for x in range(1, ws.max_row+1):
-            id = ws.cell(row = x, column = 1).value
-            samplelist = samplelist + id +","
-
+        text = request.form.get("name")
+        text = text.split('\n')
+        for x in text:
+            x = x.strip()
+            if len(x) <= 8:
+                id = x + "_10, " + x + "_20"
+            else:
+                id = x
+            samplelist += id + ","
+        
+        try:
+            r = requests.request("GET", H.con, headers=H.headers)
+        except requests.exceptions.RequestException as e:  
+            return "No LabCollector Connection"
+            exit            
         #generate response and set response variables 
         # // careful with this loop as it can break LC server!!
         url = H.url_v2 + samplelist
@@ -38,9 +43,11 @@ def result():
 
         #rebuild response text to set count:lab id:volume
         sample = samplelist.split(",")
-        for i in range(x):
-            dict_list.append(dict(ID=sample[i], conc=my_response[i]['volume'], num=i+1))
-            
+        for i in range(samplelist.count(',')+1):
+            try:
+                dict_list.append(dict(ID=sample[i], conc=my_response[i]['volume'], num=i+1))
+            except IndexError:
+                break
         return render_template("result.html", dict_list=dict_list)
     else: 
         return render_template("search.html")
@@ -73,7 +80,11 @@ def update():
                     break
                 
                 samplelist += id + ext + ","
-        
+        try:
+            r = requests.request("GET", H.con, headers=H.headers)
+        except requests.exceptions.RequestException as e:  
+            return "No LabCollector Connection"
+            exit   
         #generate response and set response variables 
         # // careful with this loop as it can break LC server!!
         url = H.url_v2 + samplelist
@@ -99,4 +110,4 @@ def update():
         return render_template("update.html")
         
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=3134)

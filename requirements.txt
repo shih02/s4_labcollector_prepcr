@@ -1,6 +1,6 @@
 Flask
 Werkzeug
 requests
-openpyxl
+openpyxl==2.6.4
 csv
 os
